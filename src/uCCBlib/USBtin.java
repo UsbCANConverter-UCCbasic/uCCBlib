@@ -143,7 +143,7 @@ public class USBtin implements SerialPortEventListener {
         } catch (SerialPortException e) {
             throw new USBtinException(e.getPortName() + " - " + e.getExceptionType());
         } catch (SerialPortTimeoutException e) {
-            throw new USBtinException("Timeout! USBtin doesn't answer. Right port?");
+            throw new USBtinException("Timeout! Device doesn't answer. Right port?");
         } catch (InterruptedException e) {
             throw new USBtinException(e);
         }                                
@@ -256,7 +256,7 @@ public class USBtin implements SerialPortEventListener {
         } catch (SerialPortException e) {
             throw new USBtinException(e);
         } catch (SerialPortTimeoutException e) {
-            throw new USBtinException("Timeout! USBtin doesn't answer. Right port?");            
+            throw new USBtinException("Timeout! Device doesn't answer. Right port?");            
         }
     }
 
@@ -325,8 +325,9 @@ public class USBtin implements SerialPortEventListener {
     @Override
     public void serialEvent(SerialPortEvent event) {
         if (event.isRXCHAR() && event.getEventValue() > 0) {
-            try {
+            try { 
                 byte buffer[] = serialPort.readBytes();
+//                byte buffer[] = serialPort.readBytes(event.getEventValue(),100);
                 for (byte b : buffer) {
                     if ((b == '\r') && incomingMessage.length() > 0) {
 
@@ -377,7 +378,7 @@ public class USBtin implements SerialPortEventListener {
                 }
             } catch (SerialPortException ex) {
                 System.err.println(ex);
-            }
+            } 
         }
     }
     
@@ -451,7 +452,7 @@ public class USBtin implements SerialPortEventListener {
         } catch (SerialPortException e) {
             throw new USBtinException(e);
         } catch (SerialPortTimeoutException e) {
-            throw new USBtinException("Timeout! USBtin doesn't answer. Right port?");            
+            throw new USBtinException("Timeout! Device doesn't answer. Right port?");            
         }               
     }
     
@@ -470,12 +471,14 @@ public class USBtin implements SerialPortEventListener {
             cmd = "M" + filter.toString();
         
         try {
-            transmit(cmd);
+            serialPort.writeBytes((cmd + "\r").getBytes());
+//            transmit(cmd);
         } catch (SerialPortException e) {
             throw new USBtinException(e);
-        } catch (SerialPortTimeoutException e) {
-            throw new USBtinException("Timeout! USBtin doesn't answer. Right port?");            
-        }
+        } 
+//        catch (SerialPortTimeoutException e) {
+//            throw new USBtinException("Timeout! Device doesn't answer. Right port?");            
+//        }
     }
     
     /**
