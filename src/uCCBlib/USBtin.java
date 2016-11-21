@@ -314,7 +314,16 @@ public class USBtin implements SerialPortEventListener {
         return this.readResponse();
     }
 
-
+    /**
+     * Clear frames to transmit
+     *
+     * @param none
+     * @return none
+     */
+    public void clearfifoTX()
+    {
+        fifoTX.clear();
+    }
     /**
      * Handle serial port event.
      * Read single byte and check for end of line character.
@@ -364,6 +373,8 @@ public class USBtin implements SerialPortEventListener {
                         
                     } else if (b == 0x07) {
                         
+                        // do not resend 
+                        fifoTX.removeFirst();
                         // resend first element from tx fifo
                         try {
                             sendFirstTXFifoMessage();
