@@ -188,6 +188,7 @@ public class USBtin implements SerialPortEventListener {
                 case 500000: baudCh = '6'; break;
                 case 800000: baudCh = '7'; break;
                 case 1000000: baudCh = '8'; break;
+                case 83300: baudCh = '9'; break;
             }
             
             if (baudCh != ' ') {
